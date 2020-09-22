@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace XMR_Produto.Activities
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme")]
     public class CadastraProdutoActivity : AppCompatActivity
     {
         EditText edtDescricao, edtPreco, edtQuantidade;
