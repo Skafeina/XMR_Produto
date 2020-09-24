@@ -11,9 +11,10 @@ using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using XMR_Produto.Classes;
+using Newtonsoft.Json;
 
 namespace XMR_Produto.Activities
-{
+{ 
     [Activity(Label = "Login", MainLauncher = true)]
     public class LoginActivity : AppCompatActivity
     {
@@ -52,6 +53,9 @@ namespace XMR_Produto.Activities
                 if (edtLogin.Text == usuario.Login && edtSenha.Text == usuario.Senha)
                 {
                     // Logaremos o usuário (abriremos uma outra activity)
+                    Intent telaCadProd = new Intent(this, typeof(CadastraProdutoActivity));
+                    telaCadProd.PutExtra("nomeUsuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
+                    StartActivity(telaCadProd);
                 }
                 else
                 {

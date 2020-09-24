@@ -3802,28 +3802,34 @@ namespace XMR_Produto
 			public const int txtInfo = 2131230909;
 			
 			// aapt resource value: 0x7F0800BE
-			public const int uniform = 2131230910;
+			public const int txtLoginUsuario = 2131230910;
 			
 			// aapt resource value: 0x7F0800BF
-			public const int unlabeled = 2131230911;
+			public const int txtNomeUsuario = 2131230911;
 			
 			// aapt resource value: 0x7F0800C0
-			public const int up = 2131230912;
+			public const int uniform = 2131230912;
 			
 			// aapt resource value: 0x7F0800C1
-			public const int useLogo = 2131230913;
+			public const int unlabeled = 2131230913;
 			
 			// aapt resource value: 0x7F0800C2
-			public const int view_offset_helper = 2131230914;
+			public const int up = 2131230914;
 			
 			// aapt resource value: 0x7F0800C3
-			public const int visible = 2131230915;
+			public const int useLogo = 2131230915;
 			
 			// aapt resource value: 0x7F0800C4
-			public const int withText = 2131230916;
+			public const int view_offset_helper = 2131230916;
 			
 			// aapt resource value: 0x7F0800C5
-			public const int wrap_content = 2131230917;
+			public const int visible = 2131230917;
+			
+			// aapt resource value: 0x7F0800C6
+			public const int withText = 2131230918;
+			
+			// aapt resource value: 0x7F0800C7
+			public const int wrap_content = 2131230919;
 			
 			static Id()
 			{

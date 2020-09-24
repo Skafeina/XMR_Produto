@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.Widget;
 using XMR_Produto.Classes;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace XMR_Produto.Activities
 {
@@ -13,7 +14,7 @@ namespace XMR_Produto.Activities
     {
         EditText edtDescricao, edtPreco, edtQuantidade;
         Button btnCadastrar;
-        TextView txtInfo;
+        TextView txtInfo, txtNomeUsuario, txtLoginUsuario;
 
         private List<Produto> _produtos = new List<Produto>();
 
@@ -31,6 +32,19 @@ namespace XMR_Produto.Activities
             edtQuantidade = FindViewById<EditText>(Resource.Id.edtQuantidade);
             btnCadastrar = FindViewById<Button>(Resource.Id.btnCadastrar);
             txtInfo = FindViewById<TextView>(Resource.Id.txtInfo);
+            txtNomeUsuario = FindViewById<TextView>(Resource.Id.txtNomeUsuario);
+            txtLoginUsuario = FindViewById<TextView>(Resource.Id.txtLoginUsuario);
+
+            //Receber possíveis informações vindas de outra activity
+            string jsonUsuario = Intent.GetStringExtra("nomeUsuario");
+            Usuario usuario = JsonConvert.DeserializeObject<Usuario>(jsonUsuario);
+
+            //Exibir as informações de nome e login nas textview's correspondentes
+            txtNomeUsuario.Text = "Usuário logado: " + usuario.Nome;
+            txtLoginUsuario.Text = "Login: " + usuario.Login;
+
+            //Exibir o nome que veio da outra tela em um Toast
+            Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
 
             //Criando a chamada do método de click (toque) do botão cadastrar
             btnCadastrar.Click += BtnCadastrar_Click;
