@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Activities\CadastraProdutoActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\PrincipalActivity.cs" />
     <Compile Include="Classes\Produto.cs" />
     <Compile Include="Classes\Usuario.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -115,6 +116,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_login.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\activity_principal.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

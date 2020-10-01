@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace XMR_Produto.Activities
 { 
-    [Activity(Label = "Login", MainLauncher = true)]
+    [Activity(Theme = "@style/TemaSemActionBar", MainLauncher = true)]
     public class LoginActivity : AppCompatActivity
     {
         EditText edtLogin, edtSenha;
@@ -53,9 +53,9 @@ namespace XMR_Produto.Activities
                 if (edtLogin.Text == usuario.Login && edtSenha.Text == usuario.Senha)
                 {
                     // Logaremos o usuário (abriremos uma outra activity)
-                    Intent telaCadProd = new Intent(this, typeof(CadastraProdutoActivity));
-                    telaCadProd.PutExtra("nomeUsuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
-                    StartActivity(telaCadProd);
+                    Intent telaPrincipal = new Intent(this, typeof(PrincipalActivity));
+                    telaPrincipal.PutExtra("usuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
+                    StartActivity(telaPrincipal);
                 }
                 else
                 {
