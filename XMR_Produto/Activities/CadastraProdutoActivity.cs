@@ -37,14 +37,14 @@ namespace XMR_Produto.Activities
 
             //Receber possíveis informações vindas de outra activity
             string jsonUsuario = Intent.GetStringExtra("nomeUsuario");
-            Usuario usuario = JsonConvert.DeserializeObject<Usuario>(jsonUsuario);
+            Usuario usuario = jsonUsuario == null ? new Usuario() : JsonConvert.DeserializeObject<Usuario>(jsonUsuario);
 
             //Exibir as informações de nome e login nas textview's correspondentes
             txtNomeUsuario.Text = "Usuário logado: " + usuario.Nome;
             txtLoginUsuario.Text = "Login: " + usuario.Login;
 
             //Exibir o nome que veio da outra tela em um Toast
-            Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
+            //Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
 
             //Criando a chamada do método de click (toque) do botão cadastrar
             btnCadastrar.Click += BtnCadastrar_Click;

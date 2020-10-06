@@ -56,6 +56,7 @@ namespace XMR_Produto.Activities
                     Intent telaPrincipal = new Intent(this, typeof(PrincipalActivity));
                     telaPrincipal.PutExtra("usuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
                     StartActivity(telaPrincipal);
+                    Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
                 }
                 else
                 {

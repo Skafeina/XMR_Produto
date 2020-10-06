@@ -11,6 +11,8 @@
         android:id="@+id/tbrPrincipal"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
