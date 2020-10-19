@@ -3820,28 +3820,37 @@ namespace XMR_Produto
 			public const int txtNomeUsuario = 2131230915;
 			
 			// aapt resource value: 0x7F0800C4
-			public const int uniform = 2131230916;
+			public const int txtRowDescricao = 2131230916;
 			
 			// aapt resource value: 0x7F0800C5
-			public const int unlabeled = 2131230917;
+			public const int txtRowPreco = 2131230917;
 			
 			// aapt resource value: 0x7F0800C6
-			public const int up = 2131230918;
+			public const int txtRowQuantidade = 2131230918;
 			
 			// aapt resource value: 0x7F0800C7
-			public const int useLogo = 2131230919;
+			public const int uniform = 2131230919;
 			
 			// aapt resource value: 0x7F0800C8
-			public const int view_offset_helper = 2131230920;
+			public const int unlabeled = 2131230920;
 			
 			// aapt resource value: 0x7F0800C9
-			public const int visible = 2131230921;
+			public const int up = 2131230921;
 			
 			// aapt resource value: 0x7F0800CA
-			public const int withText = 2131230922;
+			public const int useLogo = 2131230922;
 			
 			// aapt resource value: 0x7F0800CB
-			public const int wrap_content = 2131230923;
+			public const int view_offset_helper = 2131230923;
+			
+			// aapt resource value: 0x7F0800CC
+			public const int visible = 2131230924;
+			
+			// aapt resource value: 0x7F0800CD
+			public const int withText = 2131230925;
+			
+			// aapt resource value: 0x7F0800CE
+			public const int wrap_content = 2131230926;
 			
 			static Id()
 			{
@@ -4105,16 +4114,19 @@ namespace XMR_Produto
 			public const int notification_template_part_time = 2131427382;
 			
 			// aapt resource value: 0x7F0B0037
-			public const int select_dialog_item_material = 2131427383;
+			public const int row_produto = 2131427383;
 			
 			// aapt resource value: 0x7F0B0038
-			public const int select_dialog_multichoice_material = 2131427384;
+			public const int select_dialog_item_material = 2131427384;
 			
 			// aapt resource value: 0x7F0B0039
-			public const int select_dialog_singlechoice_material = 2131427385;
+			public const int select_dialog_multichoice_material = 2131427385;
 			
 			// aapt resource value: 0x7F0B003A
-			public const int support_simple_spinner_dropdown_item = 2131427386;
+			public const int select_dialog_singlechoice_material = 2131427386;
+			
+			// aapt resource value: 0x7F0B003B
+			public const int support_simple_spinner_dropdown_item = 2131427387;
 			
 			static Layout()
 			{

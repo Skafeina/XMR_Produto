@@ -36,7 +36,7 @@ namespace XMR_Produto.Activities
             txtLoginUsuario = FindViewById<TextView>(Resource.Id.txtLoginUsuario);
 
             //Receber possíveis informações vindas de outra activity
-            string jsonUsuario = Intent.GetStringExtra("nomeUsuario");
+            string jsonUsuario = Intent.GetStringExtra("usuario");
             Usuario usuario = jsonUsuario == null ? new Usuario() : JsonConvert.DeserializeObject<Usuario>(jsonUsuario);
 
             //Exibir as informações de nome e login nas textview's correspondentes

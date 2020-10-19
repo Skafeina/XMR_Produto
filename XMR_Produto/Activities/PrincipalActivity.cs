@@ -11,6 +11,8 @@ using Android.Support.V7.App;
 using ToolbarV7 = Android.Support.V7.Widget.Toolbar;
 using Android.Views;
 using Android.Widget;
+using XMR_Produto.Classes;
+using Newtonsoft.Json;
 
 namespace XMR_Produto.Activities
 {
@@ -20,6 +22,7 @@ namespace XMR_Produto.Activities
         ToolbarV7 tbrPrincipal;
         ListView lstProdutos;
 
+        private Usuario _usuarioLogado;
 
         List<string> produtos;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -36,6 +39,7 @@ namespace XMR_Produto.Activities
             //Definindo um título para a toolbar
             SupportActionBar.Title = "Lista de Produtos";
 
+            _usuarioLogado = JsonConvert.DeserializeObject<Usuario>(Intent.GetStringExtra("usuario"));
 
             //Inserindo nomes de produtos de maneira "HardCoded"
             produtos = new List<string>();
@@ -63,6 +67,7 @@ namespace XMR_Produto.Activities
             {
                 case Resource.Id.menu_addProduto:
                     Intent telaAddProduto = new Intent(this, typeof(CadastraProdutoActivity));
+                    telaAddProduto.PutExtra("usuario", JsonConvert.SerializeObject(_usuarioLogado));
                     StartActivity(telaAddProduto);
                     break;
                 case Resource.Id.menu_alterarSenha:
