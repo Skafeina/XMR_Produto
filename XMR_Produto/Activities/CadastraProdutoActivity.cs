@@ -6,6 +6,7 @@ using Android.Widget;
 using XMR_Produto.Classes;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Android.Content;
 
 namespace XMR_Produto.Activities
 {
@@ -38,6 +39,9 @@ namespace XMR_Produto.Activities
             //Receber possíveis informações vindas de outra activity
             string jsonUsuario = Intent.GetStringExtra("usuario");
             Usuario usuario = jsonUsuario == null ? new Usuario() : JsonConvert.DeserializeObject<Usuario>(jsonUsuario);
+
+            _produtos = JsonConvert.DeserializeObject<List<Produto>>(Intent.GetStringExtra("produtos"));
+            txtInfo.Text = "Produtos cadastrados: " + _produtos.Count;
 
             //Exibir as informações de nome e login nas textview's correspondentes
             txtNomeUsuario.Text = "Usuário logado: " + usuario.Nome;
@@ -79,6 +83,18 @@ namespace XMR_Produto.Activities
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        //Método que é executado quando se toca na setinha pra voltar
+        public override void OnBackPressed()
+        {
+            //Código para devolver algum valor para a activity que abriu a atual
+            Intent voltar = new Intent();
+            voltar.PutExtra("produtos", JsonConvert.SerializeObject(_produtos));
+            SetResult(Result.Ok, voltar);
+            Finish();
+
+            base.OnBackPressed();
         }
     }
 }

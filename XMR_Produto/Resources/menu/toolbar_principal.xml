@@ -4,7 +4,9 @@
 
   <item
     android:id="@+id/menu_addProduto"
-    android:title="Adicionar Produto"/>
+    android:title="Adicionar Produto"
+    android:icon="@drawable/round_add_24"
+    app:showAsAction="always"/>
   
   <item 
     android:id="@+id/menu_alterarSenha"
