@@ -14,6 +14,7 @@ using Android.Widget;
 using XMR_Produto.Classes;
 using Newtonsoft.Json;
 using XMR_Produto.Adapters;
+using System.Globalization;
 
 namespace XMR_Produto.Activities
 {
@@ -22,6 +23,7 @@ namespace XMR_Produto.Activities
     {
         ToolbarV7 tbrPrincipal;
         ListView lstProdutos;
+        Android.Support.V7.Widget.SearchView pesquisar;
 
         private Usuario _usuarioLogado;
 
@@ -66,6 +68,7 @@ namespace XMR_Produto.Activities
             //TODO - Exibir um AlertDialog perguntando se o usuário realmente deseja remover aquele produto tocado.
 
             //Sabendo a posição do item tocado -> e.Position
+            Produto produtoSelecionado = lstProdutos.GetItemAtPosition(e.Position).Cast<Produto>();
 
             //Criando o AlertDialog
             Android.Support.V7.App.AlertDialog.Builder alertExcluir;
@@ -74,20 +77,23 @@ namespace XMR_Produto.Activities
             //Definir o título
             alertExcluir.SetTitle("Confirmação");
             //Definir a mensagem (corpo)
-            alertExcluir.SetMessage("Você deseja realmente excluir o produto: " + _produtos[e.Position].Descricao + "?");
+            alertExcluir.SetMessage("Você deseja realmente excluir o produto: " + produtoSelecionado.Descricao + "?");
             //Definir um ícone padrão android
             alertExcluir.SetIconAttribute(Android.Resource.Attribute.AlertDialogIcon);
             //Definir os botões e suas programações (3 botões possíveis: Positive, Negative e Neutral)
             alertExcluir.SetNegativeButton("Não", delegate { });
             alertExcluir.SetPositiveButton("Sim", delegate {
                 //Remover o produto selecionado da List
-                _produtos.RemoveAt(e.Position);
+                _produtos.Remove(produtoSelecionado);
                 //Adaptar novamente
                 AdapterProduto adp = new AdapterProduto(this, _produtos);
                 //Atribuir o adaptador no ListView
                 lstProdutos.Adapter = adp;
                 //Toast pra falar que foi excluído mesmo
                 Toast.MakeText(this, "Excluído com sucesso!", ToastLength.Short).Show();
+                //Limpa o filtro
+                pesquisar.SetQuery("", false);
+                //pesquisar.ClearFocus();
             });
             //Exibir o alert na tela
             alertExcluir.Show();
@@ -97,6 +103,27 @@ namespace XMR_Produto.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.toolbar_principal, menu);
+
+            //Cria e configura o searchView - Somente após as 3 linhas abaixo será possível programar o "pesquisar"
+            IMenuItem item = menu.FindItem(Resource.Id.menu_pesquisar);
+            View searchView = (Android.Support.V7.Widget.SearchView)item.ActionView;
+            pesquisar = searchView.JavaCast<Android.Support.V7.Widget.SearchView>();
+
+            //Atualizar a lista conforme escrevemos nele
+            //Método de evento que é executado a cada letra que digitamos ou apagamos
+            pesquisar.QueryTextChange += (s, e) => {
+                List<Produto> listaProdutoFiltrada = _produtos.Where(p => p.Descricao //Buscar produtos ONDE a descrição \/
+                                                                                     .ToUpper() //Transformado todas as descrições dos produtos em letras maiúculas
+                                                                                     .RemoveDiacritics() //Removendo as acentuações das descrições dos produtos
+                                                                                     .Contains( // Verificando se estas Descrições modificadas contém:
+                                                                                                e.NewText.ToUpper() //O texto digitado para maiúsculo
+                                                                                                         .RemoveDiacritics() //removido as acentuações do que foi digitado
+                                                                                                                            )).ToList(); //Convertendo o resultado para uma nova lista
+                AdapterProduto adp = new AdapterProduto(this, listaProdutoFiltrada); // Adaptando a lista filtrada
+                lstProdutos.Adapter = adp; //Atribuindo a adaptação ao ListView
+            };
+
+
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -134,5 +161,34 @@ namespace XMR_Produto.Activities
             base.OnActivityResult(requestCode, resultCode, data);
         }
 
+
     }
+
+    //Uma nova classe estática com um nome aleatório (Extension)
+    public static class Extension
+    {
+        //Para receber este método de extensão que "Complementa" o tipo String (string) com o método "RemoveDiacritics"
+        //Método este que remove os acentos dos caracteres
+        public static string RemoveDiacritics(this String s)
+        {
+            String normalizedString = s.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < normalizedString.Length; i++)
+            {
+                Char c = normalizedString[i];
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                    stringBuilder.Append(c);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public static T Cast<T>(this Java.Lang.Object obj) where T : class
+        {
+            var propertyInfo = obj.GetType().GetProperty("Instance");
+            return propertyInfo == null ? null : propertyInfo.GetValue(obj, null) as T;
+        }
+    }
+
 }
