@@ -15,6 +15,7 @@ using XMR_Produto.Classes;
 using Newtonsoft.Json;
 using XMR_Produto.Adapters;
 using System.Globalization;
+using XMR_Produto.Fragments;
 
 namespace XMR_Produto.Activities
 {
@@ -37,7 +38,7 @@ namespace XMR_Produto.Activities
 
             tbrPrincipal = FindViewById<ToolbarV7>(Resource.Id.tbrPrincipal);
             lstProdutos = FindViewById<ListView>(Resource.Id.lstProdutos);
-            
+
             //Definindo qual a toolbar desta tela (muitos métodos serão referenciados à toolbar)
             SetSupportActionBar(tbrPrincipal);
             //Definindo um título para a toolbar
@@ -61,6 +62,31 @@ namespace XMR_Produto.Activities
             //Criar um evento de toque longo em um item no listView
             lstProdutos.ItemLongClick += LstProdutos_ItemLongClick;
 
+            //Criar um evento de toque simples em um item no listView
+            lstProdutos.ItemClick += LstProdutos_ItemClick;
+
+        }
+
+        private void LstProdutos_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            //TODO - Quanto tocar em um item, abrir o fragment com os campos já preenchidos
+
+            //Obtendo qual o produto tocado
+            Produto produtoSelecionado = lstProdutos.GetItemAtPosition(e.Position).Cast<Produto>();
+
+            //Abrindo o Dialog Fragment
+            Android.Support.V4.App.FragmentTransaction tr = SupportFragmentManager.BeginTransaction();
+            DialogProduto dp = new DialogProduto(produtoSelecionado, this);
+            dp.Show(tr, "telaAlteraProduto");
+
+            dp.CliqueAlterar += (s, ev) =>
+            {
+                //Dentro do "ev" está o objeto do tipo produto já alterado.
+                Produto produtoAlterado = ev.ProdutoAlterado;
+
+                Toast.MakeText(this, produtoAlterado.Descricao + " e " + produtoSelecionado.Descricao, ToastLength.Short).Show();
+            };
+
         }
 
         private void LstProdutos_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
@@ -82,7 +108,8 @@ namespace XMR_Produto.Activities
             alertExcluir.SetIconAttribute(Android.Resource.Attribute.AlertDialogIcon);
             //Definir os botões e suas programações (3 botões possíveis: Positive, Negative e Neutral)
             alertExcluir.SetNegativeButton("Não", delegate { });
-            alertExcluir.SetPositiveButton("Sim", delegate {
+            alertExcluir.SetPositiveButton("Sim", delegate
+            {
                 //Remover o produto selecionado da List
                 _produtos.Remove(produtoSelecionado);
                 //Adaptar novamente
@@ -111,7 +138,8 @@ namespace XMR_Produto.Activities
 
             //Atualizar a lista conforme escrevemos nele
             //Método de evento que é executado a cada letra que digitamos ou apagamos
-            pesquisar.QueryTextChange += (s, e) => {
+            pesquisar.QueryTextChange += (s, e) =>
+            {
                 List<Produto> listaProdutoFiltrada = _produtos.Where(p => p.Descricao //Buscar produtos ONDE a descrição \/
                                                                                      .ToUpper() //Transformado todas as descrições dos produtos em letras maiúculas
                                                                                      .RemoveDiacritics() //Removendo as acentuações das descrições dos produtos
