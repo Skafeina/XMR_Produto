@@ -74,6 +74,9 @@ namespace XMR_Produto.Activities
             //Obtendo qual o produto tocado
             Produto produtoSelecionado = lstProdutos.GetItemAtPosition(e.Position).Cast<Produto>();
 
+            //Criando uma cópia em que um obj não esteja referenciado ao outro
+            Produto produtoSelecionadoH = JsonConvert.DeserializeObject<Produto>(JsonConvert.SerializeObject(produtoSelecionado));
+
             //Abrindo o Dialog Fragment
             Android.Support.V4.App.FragmentTransaction tr = SupportFragmentManager.BeginTransaction();
             DialogProduto dp = new DialogProduto(produtoSelecionado, this);
@@ -82,9 +85,12 @@ namespace XMR_Produto.Activities
             dp.CliqueAlterar += (s, ev) =>
             {
                 //Dentro do "ev" está o objeto do tipo produto já alterado.
-                Produto produtoAlterado = ev.ProdutoAlterado;
-
-                Toast.MakeText(this, produtoAlterado.Descricao + " e " + produtoSelecionado.Descricao, ToastLength.Short).Show();
+                Produto produtoAlterado = ev.ProdutoAlterado;                
+                Toast.MakeText(this, produtoAlterado.Descricao + " alterado. Antes: " + produtoSelecionadoH.Descricao, ToastLength.Short).Show();
+                //Adaptar novamente
+                AdapterProduto adp = new AdapterProduto(this, _produtos);
+                //Atribuir o adaptador no ListView
+                lstProdutos.Adapter = adp;
             };
 
         }
