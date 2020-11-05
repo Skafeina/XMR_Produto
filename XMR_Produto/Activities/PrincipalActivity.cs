@@ -176,7 +176,11 @@ namespace XMR_Produto.Activities
                     StartActivityForResult(telaAddProduto, 1);
                     break;
                 case Resource.Id.menu_alterarSenha:
-                    Toast.MakeText(this, "Tocou em alterar senha!", ToastLength.Long).Show();
+
+                    Intent telaAlterarSenha = new Intent(this, typeof(AlteraSenhaActivity));
+                    telaAlterarSenha.PutExtra("usuario", JsonConvert.SerializeObject(_usuarioLogado));
+                    StartActivityForResult(telaAlterarSenha, 2);
+
                     break;
             }
             return base.OnOptionsItemSelected(item);
@@ -192,6 +196,19 @@ namespace XMR_Produto.Activities
                 //Atribuindo os dados adaptados para o componente da tela ListView
                 lstProdutos.Adapter = adaptador;
             }
+            else if (requestCode == 2 && resultCode == Result.Ok && data != null)
+            {
+                string senhaAntiga = _usuarioLogado.Senha;
+                _usuarioLogado = JsonConvert.DeserializeObject<Usuario>(data.GetStringExtra("usuario"));
+                if (senhaAntiga != _usuarioLogado.Senha)
+                {
+                    Intent voltarLogin = new Intent();
+                    voltarLogin.PutExtra("usuario", JsonConvert.SerializeObject(_usuarioLogado));
+                    SetResult(Result.Ok, voltarLogin);
+                    Finish();
+                }
+            }
+
             base.OnActivityResult(requestCode, resultCode, data);
         }
 

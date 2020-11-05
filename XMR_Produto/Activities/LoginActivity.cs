@@ -39,7 +39,7 @@ namespace XMR_Produto.Activities
                 Nome = "Administrator",
                 Login = "admin",
                 Senha = "123",
-                Administrador = true,
+                Administrador = false,
                 Ativo = true
             };
 
@@ -55,7 +55,7 @@ namespace XMR_Produto.Activities
                     // Logaremos o usuário (abriremos uma outra activity)
                     Intent telaPrincipal = new Intent(this, typeof(PrincipalActivity));
                     telaPrincipal.PutExtra("usuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
-                    StartActivity(telaPrincipal);
+                    StartActivityForResult(telaPrincipal, 1);
                     Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
                 }
                 else
@@ -68,6 +68,16 @@ namespace XMR_Produto.Activities
             {
                 throw;
             }
+        }
+
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            if (requestCode == 1 && resultCode == Result.Ok && data != null)
+            {
+                usuario = JsonConvert.DeserializeObject<Usuario>(data.GetStringExtra("usuario"));
+            }
+
+            base.OnActivityResult(requestCode, resultCode, data);
         }
     }
 }
