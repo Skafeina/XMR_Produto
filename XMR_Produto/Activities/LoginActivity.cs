@@ -14,7 +14,7 @@ using XMR_Produto.Classes;
 using Newtonsoft.Json;
 
 namespace XMR_Produto.Activities
-{ 
+{
     [Activity(Theme = "@style/TemaSemActionBar", MainLauncher = true)]
     public class LoginActivity : AppCompatActivity
     {
@@ -39,7 +39,7 @@ namespace XMR_Produto.Activities
                 Nome = "Administrator",
                 Login = "admin",
                 Senha = "123",
-                Administrador = false,
+                Administrador = true,
                 Ativo = true
             };
 
@@ -50,23 +50,17 @@ namespace XMR_Produto.Activities
         {
             try
             {
-                if (edtLogin.Text == usuario.Login && edtSenha.Text == usuario.Senha)
-                {
-                    // Logaremos o usuário (abriremos uma outra activity)
-                    Intent telaPrincipal = new Intent(this, typeof(PrincipalActivity));
-                    telaPrincipal.PutExtra("usuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
-                    StartActivityForResult(telaPrincipal, 1);
-                    Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
-                }
-                else
-                {
-                    // Mensagem de falha de login
-                    Toast.MakeText(this, "Usuário e/ou senha incorretos.", ToastLength.Short).Show();
-                }
+                // Logaremos o usuário (abriremos uma outra activity)
+                usuario = Usuario.RealizaLogin(edtLogin.Text, edtSenha.Text);
+
+                Intent telaPrincipal = new Intent(this, typeof(PrincipalActivity));
+                telaPrincipal.PutExtra("usuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
+                StartActivityForResult(telaPrincipal, 1);
+                Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Toast.MakeText(this, ex.Message, ToastLength.Short).Show();
             }
         }
 

@@ -27,13 +27,15 @@ namespace XMR_Produto.Fragments
     {
         private Produto _produto;
         private Context _contexto;
+        private Usuario _usuarioLogado;
 
         public event EventHandler<AoClicarAlterar> CliqueAlterar;
 
-        public DialogProduto(Produto produto, Context contexto)
+        public DialogProduto(Produto produto, Context contexto, Usuario usuarioLogado)
         {
             _produto = produto;
             _contexto = contexto;
+            _usuarioLogado = usuarioLogado;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -51,7 +53,14 @@ namespace XMR_Produto.Fragments
             edtPrecoUp.Text = _produto.Preco.ToString();
             edtQuantidadeUp.Text = _produto.Quantidade.ToString();
 
-            btnAlterar.Click += (s, e) => {
+
+            edtDescricaoUp.Enabled = _usuarioLogado.Administrador;
+            edtPrecoUp.Enabled = _usuarioLogado.Administrador;
+            edtQuantidadeUp.Enabled = _usuarioLogado.Administrador;
+            btnAlterar.Enabled = _usuarioLogado.Administrador;
+
+            btnAlterar.Click += (s, e) =>
+            {
                 _produto.Descricao = edtDescricaoUp.Text;
                 _produto.Preco = decimal.Parse(edtPrecoUp.Text);
                 _produto.Quantidade = int.Parse(edtQuantidadeUp.Text);

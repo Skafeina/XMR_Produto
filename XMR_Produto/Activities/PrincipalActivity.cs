@@ -79,7 +79,7 @@ namespace XMR_Produto.Activities
 
             //Abrindo o Dialog Fragment
             Android.Support.V4.App.FragmentTransaction tr = SupportFragmentManager.BeginTransaction();
-            DialogProduto dp = new DialogProduto(produtoSelecionado, this);
+            DialogProduto dp = new DialogProduto(produtoSelecionado, this, _usuarioLogado);
             dp.Show(tr, "telaAlteraProduto");
 
             dp.CliqueAlterar += (s, ev) =>
