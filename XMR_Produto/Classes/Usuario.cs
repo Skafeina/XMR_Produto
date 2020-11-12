@@ -51,6 +51,10 @@ namespace XMR_Produto.Classes
             {
                 throw;
             }
+            finally
+            {
+                cn.FechaConexao();
+            }
         }
     }
 }

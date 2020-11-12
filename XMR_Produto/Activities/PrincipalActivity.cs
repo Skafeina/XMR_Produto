@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using XMR_Produto.Adapters;
 using System.Globalization;
 using XMR_Produto.Fragments;
+using System.Runtime.InteropServices;
 
 namespace XMR_Produto.Activities
 {
@@ -46,12 +47,22 @@ namespace XMR_Produto.Activities
 
             _usuarioLogado = JsonConvert.DeserializeObject<Usuario>(Intent.GetStringExtra("usuario"));
 
+            try
+            {
+                //Buscar todos os produtos do banco
+                _produtos = Produto.BuscarProdutos();
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+            }
+            
             //Instanciar a lista para poder usá-la
-            _produtos = new List<Produto>();
+            //_produtos = new List<Produto>();
 
             //Adicionar 2 produtos com todas as informações (HardCode)
-            _produtos.Add(new Produto() { Id = 1, Descricao = "Leite", Preco = 3.89m, Quantidade = 233, Ativo = true });
-            _produtos.Add(new Produto() { Id = 2, Descricao = "Pão Francês", Preco = 1.07m, Quantidade = 467, Ativo = true });
+            //_produtos.Add(new Produto() { Id = 1, Descricao = "Leite", Preco = 3.89m, Quantidade = 233, Ativo = true });
+            //_produtos.Add(new Produto() { Id = 2, Descricao = "Pão Francês", Preco = 1.07m, Quantidade = 467, Ativo = true });
 
             //Adaptando a lista para "encaixar" na listView
             AdapterProduto adaptador = new AdapterProduto(this, _produtos);

@@ -23,7 +23,7 @@ namespace XMR_Produto.Activities
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-           
+
             // Linha que cria o vínculo entre layout (parte visual) com esta classe (codificação).
             SetContentView(Resource.Layout.activity_cadastraProduto);
 
@@ -60,22 +60,35 @@ namespace XMR_Produto.Activities
             //Alimentando as propriedades de um objeto (novoProduto) que acaba de ser criado.
             Produto novoProduto = new Produto
             {
-                Id = _produtos.Count + 1,
+                Id = 0,
                 Descricao = edtDescricao.Text,
                 Preco = decimal.Parse(edtPreco.Text),
                 Quantidade = int.Parse(edtQuantidade.Text)
             };
 
-            //Adicionando este objeto à lista
-            _produtos.Add(novoProduto);
+            try
+            {
+                //Adicionando este objeto no banco
+                novoProduto.Cadastrar();
 
-            //Atualizar a frase da txtInfo com a quantidade de produtos inseridos na lista
-            txtInfo.Text = "Produtos cadastrados: " + _produtos.Count;
+                //Adicionando este objeto à lista
+                _produtos.Add(novoProduto);
 
-            //Limpando os campos
-            edtDescricao.Text = "";
-            edtPreco.Text = "";
-            edtQuantidade.Text = "";
+                //Exibir toast de sucesso.
+                Toast.MakeText(this, novoProduto.Descricao + " adicionado com sucesso!", ToastLength.Long).Show();
+
+                //Atualizar a frase da txtInfo com a quantidade de produtos inseridos na lista
+                txtInfo.Text = "Produtos cadastrados: " + _produtos.Count;
+
+                //Limpando os campos
+                edtDescricao.Text = "";
+                edtPreco.Text = "";
+                edtQuantidade.Text = "";
+            }
+            catch (System.Exception ex)
+            {
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
