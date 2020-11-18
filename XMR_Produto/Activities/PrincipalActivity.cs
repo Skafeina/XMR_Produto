@@ -56,7 +56,7 @@ namespace XMR_Produto.Activities
             {
                 Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
             }
-            
+
             //Instanciar a lista para poder usá-la
             //_produtos = new List<Produto>();
 
@@ -95,13 +95,30 @@ namespace XMR_Produto.Activities
 
             dp.CliqueAlterar += (s, ev) =>
             {
-                //Dentro do "ev" está o objeto do tipo produto já alterado.
-                Produto produtoAlterado = ev.ProdutoAlterado;                
-                Toast.MakeText(this, produtoAlterado.Descricao + " alterado. Antes: " + produtoSelecionadoH.Descricao, ToastLength.Short).Show();
-                //Adaptar novamente
-                AdapterProduto adp = new AdapterProduto(this, _produtos);
-                //Atribuir o adaptador no ListView
-                lstProdutos.Adapter = adp;
+                try
+                {
+                    //Alterar o produto no banco
+                    ev.ProdutoAlterado.Alterar();
+
+                    //Mensagem de sucesso!
+                    Toast.MakeText(this, ev.ProdutoAlterado.Descricao + " alterado. Antes: " + produtoSelecionadoH.Descricao, ToastLength.Short).Show();
+
+                    //Existe uma relação de referência entre objetos:
+                    //- produtoSelecionado aponta pro mesmo endereço do ev.ProdutoAlterado, ou seja, alterou um, o outro também é alterado.
+                    //Que consequentemente, altera o produto da lista _produtos.
+
+                    //Adaptar novamente
+                    AdapterProduto adp = new AdapterProduto(this, _produtos);
+                    //Atribuir o adaptador no ListView
+                    lstProdutos.Adapter = adp;
+                }
+                catch (Exception ex)
+                {
+                    Toast.MakeText(this, ex.Message, ToastLength.Short).Show();
+                    ev.ProdutoAlterado.Descricao = produtoSelecionadoH.Descricao;
+                    ev.ProdutoAlterado.Preco = produtoSelecionadoH.Preco;
+                    ev.ProdutoAlterado.Quantidade = produtoSelecionadoH.Quantidade;
+                }
             };
 
         }
@@ -127,17 +144,26 @@ namespace XMR_Produto.Activities
             alertExcluir.SetNegativeButton("Não", delegate { });
             alertExcluir.SetPositiveButton("Sim", delegate
             {
-                //Remover o produto selecionado da List
-                _produtos.Remove(produtoSelecionado);
-                //Adaptar novamente
-                AdapterProduto adp = new AdapterProduto(this, _produtos);
-                //Atribuir o adaptador no ListView
-                lstProdutos.Adapter = adp;
-                //Toast pra falar que foi excluído mesmo
-                Toast.MakeText(this, "Excluído com sucesso!", ToastLength.Short).Show();
-                //Limpa o filtro
-                pesquisar.SetQuery("", false);
-                //pesquisar.ClearFocus();
+                try
+                {
+                    //Remover o produto selecionado do Banco
+                    produtoSelecionado.Excluir();
+                    //Remover o produto selecionado da List
+                    _produtos.Remove(produtoSelecionado);
+                    //Adaptar novamente
+                    AdapterProduto adp = new AdapterProduto(this, _produtos);
+                    //Atribuir o adaptador no ListView
+                    lstProdutos.Adapter = adp;
+                    //Toast pra falar que foi excluído mesmo
+                    Toast.MakeText(this, "Excluído com sucesso!", ToastLength.Short).Show();
+                    //Limpa o filtro
+                    pesquisar.SetQuery("", false);
+                    //pesquisar.ClearFocus();
+                }
+                catch (Exception ex)
+                {
+                    Toast.MakeText(this, ex.Message, ToastLength.Short).Show();
+                }
             });
             //Exibir o alert na tela
             alertExcluir.Show();
