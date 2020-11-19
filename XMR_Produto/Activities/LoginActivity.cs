@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace XMR_Produto.Activities
 {
-    [Activity(Theme = "@style/TemaSemActionBar", MainLauncher = true)]
+    [Activity(Theme = "@style/TemaSemActionBar")]
     public class LoginActivity : AppCompatActivity
     {
         EditText edtLogin, edtSenha;
