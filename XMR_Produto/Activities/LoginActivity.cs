@@ -22,6 +22,7 @@ namespace XMR_Produto.Activities
         Button btnLogin;
 
         Usuario usuario;
+        private List<Produto> _produtos;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -33,15 +34,7 @@ namespace XMR_Produto.Activities
             edtSenha = FindViewById<EditText>(Resource.Id.edtSenha);
             btnLogin = FindViewById<Button>(Resource.Id.btnLogin);
 
-            usuario = new Usuario
-            {
-                Id = 1,
-                Nome = "Administrator",
-                Login = "admin",
-                Senha = "123",
-                Administrador = true,
-                Ativo = true
-            };
+            _produtos = JsonConvert.DeserializeObject<List<Produto>>(Intent.GetStringExtra("produtos"));
 
             btnLogin.Click += BtnLogin_Click;
         }
@@ -55,6 +48,7 @@ namespace XMR_Produto.Activities
 
                 Intent telaPrincipal = new Intent(this, typeof(PrincipalActivity));
                 telaPrincipal.PutExtra("usuario", JsonConvert.SerializeObject(usuario)); //Informação que a gente quer enviar para a outra tela
+                telaPrincipal.PutExtra("produtos", JsonConvert.SerializeObject(_produtos));
                 StartActivityForResult(telaPrincipal, 1);
                 Toast.MakeText(this, "Bem-vindo, " + usuario.Nome + "!", ToastLength.Long).Show();
             }
@@ -69,6 +63,16 @@ namespace XMR_Produto.Activities
             if (requestCode == 1 && resultCode == Result.Ok && data != null)
             {
                 usuario = JsonConvert.DeserializeObject<Usuario>(data.GetStringExtra("usuario"));
+            }
+
+            try
+            {
+                //Buscar todos os produtos do banco
+                _produtos = Produto.BuscarProdutos();
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
             }
 
             base.OnActivityResult(requestCode, resultCode, data);

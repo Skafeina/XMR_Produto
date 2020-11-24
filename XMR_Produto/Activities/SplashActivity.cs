@@ -10,12 +10,16 @@ using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
+using XMR_Produto.Classes;
 
 namespace XMR_Produto.Activities
 {
     [Activity(Theme = "@style/Splash", MainLauncher = true, NoHistory = true)]
     public class SplashActivity : AppCompatActivity
     {
+        private List<Produto> _produtos;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -25,8 +29,19 @@ namespace XMR_Produto.Activities
             //Aqui pode ser colocado todo o carregamento do app
             //ou seja, buscas no banco, imagens, mapas, listas...
 
+            try
+            {
+                //Buscar todos os produtos do banco
+                _produtos = Produto.BuscarProdutos();
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+                _produtos = new List<Produto>();
+            }
+
             Intent telaLogin = new Intent(this, typeof(LoginActivity));
-            //PutExtra... Passar todos os parâmetros para a tela de login
+            telaLogin.PutExtra("produtos", JsonConvert.SerializeObject(_produtos));
             StartActivity(telaLogin);
         }
     }

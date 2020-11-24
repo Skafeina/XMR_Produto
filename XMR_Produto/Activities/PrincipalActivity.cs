@@ -17,6 +17,7 @@ using XMR_Produto.Adapters;
 using System.Globalization;
 using XMR_Produto.Fragments;
 using System.Runtime.InteropServices;
+using Android.Support.V4.Widget;
 
 namespace XMR_Produto.Activities
 {
@@ -26,6 +27,7 @@ namespace XMR_Produto.Activities
         ToolbarV7 tbrPrincipal;
         ListView lstProdutos;
         Android.Support.V7.Widget.SearchView pesquisar;
+        SwipeRefreshLayout srlListaProduto;
 
         private Usuario _usuarioLogado;
 
@@ -38,6 +40,7 @@ namespace XMR_Produto.Activities
             SetContentView(Resource.Layout.activity_principal);
 
             tbrPrincipal = FindViewById<ToolbarV7>(Resource.Id.tbrPrincipal);
+            srlListaProduto = FindViewById<SwipeRefreshLayout>(Resource.Id.srlListaProduto);
             lstProdutos = FindViewById<ListView>(Resource.Id.lstProdutos);
 
             //Definindo qual a toolbar desta tela (muitos métodos serão referenciados à toolbar)
@@ -46,29 +49,16 @@ namespace XMR_Produto.Activities
             SupportActionBar.Title = "Lista de Produtos";
 
             _usuarioLogado = JsonConvert.DeserializeObject<Usuario>(Intent.GetStringExtra("usuario"));
-
-            try
-            {
-                //Buscar todos os produtos do banco
-                _produtos = Produto.BuscarProdutos();
-            }
-            catch (Exception ex)
-            {
-                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
-            }
-
-            //Instanciar a lista para poder usá-la
-            //_produtos = new List<Produto>();
-
-            //Adicionar 2 produtos com todas as informações (HardCode)
-            //_produtos.Add(new Produto() { Id = 1, Descricao = "Leite", Preco = 3.89m, Quantidade = 233, Ativo = true });
-            //_produtos.Add(new Produto() { Id = 2, Descricao = "Pão Francês", Preco = 1.07m, Quantidade = 467, Ativo = true });
+            _produtos = JsonConvert.DeserializeObject<List<Produto>>(Intent.GetStringExtra("produtos"));
 
             //Adaptando a lista para "encaixar" na listView
             AdapterProduto adaptador = new AdapterProduto(this, _produtos);
 
             //Atribuindo os dados adaptados para o componente da tela ListView
             lstProdutos.Adapter = adaptador;
+
+            //Evento de atualização da listView através do swipeRefreshLayout
+            srlListaProduto.Refresh += SrlListaProduto_Refresh;
 
             //Criar um evento de toque longo em um item no listView
             lstProdutos.ItemLongClick += LstProdutos_ItemLongClick;
@@ -78,10 +68,36 @@ namespace XMR_Produto.Activities
 
         }
 
+        private void SrlListaProduto_Refresh(object sender, EventArgs e)
+        {
+            //Travar o listView e mostrar o processo de loading
+            srlListaProduto.Post(delegate {
+                srlListaProduto.Refreshing = true;
+                lstProdutos.Clickable = false;
+            });
+
+            //Realizar o update da listView
+            try
+            {
+                _produtos = Produto.BuscarProdutos();
+                AdapterProduto dp = new AdapterProduto(this, _produtos);
+                lstProdutos.Adapter = dp;
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+            }
+
+            //Destravar o listView e ocultar o processo de loading
+            srlListaProduto.Post(delegate {
+                srlListaProduto.Refreshing = false;
+                lstProdutos.Clickable = true;
+            });
+        }
+
         private void LstProdutos_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            //TODO - Quanto tocar em um item, abrir o fragment com os campos já preenchidos
-
+            
             //Obtendo qual o produto tocado
             Produto produtoSelecionado = lstProdutos.GetItemAtPosition(e.Position).Cast<Produto>();
 
@@ -125,8 +141,6 @@ namespace XMR_Produto.Activities
 
         private void LstProdutos_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
         {
-            //TODO - Exibir um AlertDialog perguntando se o usuário realmente deseja remover aquele produto tocado.
-
             //Sabendo a posição do item tocado -> e.Position
             Produto produtoSelecionado = lstProdutos.GetItemAtPosition(e.Position).Cast<Produto>();
 
