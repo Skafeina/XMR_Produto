@@ -18,16 +18,23 @@ using System.Globalization;
 using XMR_Produto.Fragments;
 using System.Runtime.InteropServices;
 using Android.Support.V4.Widget;
+using Android.Support.Design.Widget;
+using static Android.Support.Design.Widget.NavigationView;
+using Android.Support.V4.View;
 
 namespace XMR_Produto.Activities
 {
     [Activity(Theme = "@style/TemaSemActionBar")]
-    public class PrincipalActivity : AppCompatActivity
+    public class PrincipalActivity : AppCompatActivity, IOnNavigationItemSelectedListener
     {
         ToolbarV7 tbrPrincipal;
         ListView lstProdutos;
         Android.Support.V7.Widget.SearchView pesquisar;
         SwipeRefreshLayout srlListaProduto;
+
+        DrawerLayout drlPrincipal;
+        NavigationView nvvPrincipal;
+
 
         private Usuario _usuarioLogado;
 
@@ -43,10 +50,18 @@ namespace XMR_Produto.Activities
             srlListaProduto = FindViewById<SwipeRefreshLayout>(Resource.Id.srlListaProduto);
             lstProdutos = FindViewById<ListView>(Resource.Id.lstProdutos);
 
+            drlPrincipal = FindViewById<DrawerLayout>(Resource.Id.drlPrincipal);
+            nvvPrincipal = FindViewById<NavigationView>(Resource.Id.nvvPrincipal);
+
             //Definindo qual a toolbar desta tela (muitos métodos serão referenciados à toolbar)
             SetSupportActionBar(tbrPrincipal);
             //Definindo um título para a toolbar
             SupportActionBar.Title = "Lista de Produtos";
+
+            //Declaração do menu hamburger da toolbar (as três listras) e inserindo ele na toolbar já no construtor
+            ActionBarDrawerToggle ham = new ActionBarDrawerToggle(this, drlPrincipal, tbrPrincipal, Resource.String.nvv_drl_aberto, Resource.String.nvv_drl_fechado);
+            drlPrincipal.AddDrawerListener(ham);
+            ham.SyncState();
 
             _usuarioLogado = JsonConvert.DeserializeObject<Usuario>(Intent.GetStringExtra("usuario"));
             _produtos = JsonConvert.DeserializeObject<List<Produto>>(Intent.GetStringExtra("produtos"));
@@ -56,6 +71,10 @@ namespace XMR_Produto.Activities
 
             //Atribuindo os dados adaptados para o componente da tela ListView
             lstProdutos.Adapter = adaptador;
+
+            //NavigationView estará "ouvindo" quando o usuário tocar em um item do menu
+            //Para isso, foi preciso herdar a interface IOnNavigationItemSelectedListener e implementar o seu método OnNavigationItemSelected
+            nvvPrincipal.SetNavigationItemSelectedListener(this);
 
             //Evento de atualização da listView através do swipeRefreshLayout
             srlListaProduto.Refresh += SrlListaProduto_Refresh;
@@ -263,7 +282,20 @@ namespace XMR_Produto.Activities
             base.OnActivityResult(requestCode, resultCode, data);
         }
 
-
+        public bool OnNavigationItemSelected(IMenuItem menuItem)
+        {
+            switch (menuItem.ItemId)
+            {
+                case Resource.Id.drlCompartilhar:
+                    Toast.MakeText(this, "Tocou no item \"Compartilhar\"", ToastLength.Short).Show();
+                    break;
+                default:
+                    break;
+            }
+            //Tocou em qualquer item, deve-se fechar o drawer (gaveta)
+            drlPrincipal.CloseDrawer(GravityCompat.Start);
+            return true;
+        }
     }
 
     //Uma nova classe estática com um nome aleatório (Extension)

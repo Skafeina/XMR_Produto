@@ -49,8 +49,9 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>Full</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <MandroidI18n>West;Other</MandroidI18n>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -157,6 +158,20 @@
   <ItemGroup>
     <Content Include="BD\turman11.sql" />
     <AndroidResource Include="Resources\drawable\product.png" />
+    <AndroidResource Include="Resources\menu\drawer_principal.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_done_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_edit_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_exit_to_app_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_message_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_person_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_person_add_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_search_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_send_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_share_24.xml" />
+    <AndroidResource Include="Resources\drawable\baseline_vpn_key_24.xml" />
+    <AndroidResource Include="Resources\drawable\outline_cancel_24.xml" />
+    <AndroidResource Include="Resources\drawable\profileImage.png" />
+    <AndroidResource Include="Resources\drawable\saturno.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

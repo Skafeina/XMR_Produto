@@ -1,7 +1,7 @@
 <resources>
 
   <style name="Splash" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="android:windowBackground">@drawable/product</item>
+    <item name="android:windowBackground">@drawable/saturno</item>
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowFullscreen">true</item>

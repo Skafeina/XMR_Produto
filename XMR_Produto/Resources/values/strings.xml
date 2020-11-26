@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">Produto</string>
-    <string name="action_settings">Settings</string>
+  <string name="app_name">Produto</string>
+  <string name="action_settings">Settings</string>
+
+  <string name="nvv_drl_aberto">Drawer Aberto</string>
+  <string name="nvv_drl_fechado">Drawer Fechado</string>
 </resources>
